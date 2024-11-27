@@ -47,7 +47,7 @@ export default function Home() {
   const carbonEmissionRate = 0.52; // kgCO₂/kWh
   const hoursPerMonth = 24 * 30; // 720 ชั่วโมง/เดือน
 
-  const mockOptimalRPM: OptimalRPMInput = {
+  const [mockOptimalRPM, setMockOptimalRPM] = useState<OptimalRPMInput>({
     flow_rate: 12.5,
     inlet_temperature: 35.0,
     outlet_temperature: 30.0,
@@ -61,9 +61,9 @@ export default function Home() {
     cooling_load: 2.5,
     motor_speed: 3000,
     energy_usage_regular_rpm: 1.2,
-  };
+  });
 
-  const mockLifespan: LifespanInput = {
+  const [mockLifespan, setMockLifespan] = useState<LifespanInput>({
     delta_temperature: 5.0,
     pressure: 101.3,
     delta_pressure: 0.5,
@@ -72,7 +72,89 @@ export default function Home() {
     motor_speed: 3000,
     vibration: 0.02,
     ambient_temperature: 28.0,
-  };
+  });
+
+  const [csvData, setCsvData] = useState<any[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // ฟังก์ชันโหลดข้อมูลจาก CSV
+  const fetchCSVData = async () => {
+  try {
+    const response = await fetch("/adjusted_cooling_system_data.json"); // โหลด JSON จาก path
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const jsonData = await response.json(); // แปลงข้อมูล JSON เป็น JavaScript object
+    console.log("Fetched JSON Data:", jsonData); // ตรวจสอบข้อมูลที่ได้
+    return jsonData.map((row: any) => ({
+      flow_rate: parseFloat(row["Flow Rate (L/min)"]).toFixed(2) || 0, // ใช้ 0 เป็นค่าเริ่มต้นหากแปลงไม่ได้
+      inlet_temperature: parseFloat(row["Inlet Temperature (°C)"]).toFixed(2) || 0,
+      outlet_temperature: parseFloat(row["Outlet Temperature (°C)"]).toFixed(2) || 0,
+      delta_temperature: parseFloat(row["Delta Temperature (°C)"]).toFixed(2) || 0,
+      pressure: parseFloat(row["Pressure (Bar)"]).toFixed(2) || 0,
+      delta_pressure: parseFloat(row["Delta Pressure (Bar)"]).toFixed(2) || 0,
+      power_consumption: parseFloat(row["Power Consumption (kW)"]).toFixed(2) || 0,
+      vibration: parseFloat(row["Vibration (m/s²)"]).toFixed(2) || 0,
+      ambient_temperature: parseFloat(row["Ambient Temperature (°C)"]).toFixed(2) || 0,
+      time_of_day: row["Time of Day"] || "Unknown", // ค่าเริ่มต้นหากไม่มีข้อมูล
+      cooling_load: parseFloat(row["Cooling Load (kW)"]).toFixed(2) || 0,
+      motor_speed: parseFloat(row["Motor Speed (RPM)"]).toFixed(2) || 0,
+      energy_usage_regular_rpm: parseFloat(row["Energy Usage (Regular RPM) (kW)"]).toFixed(2) || 0,
+    }));
+  } catch (error) {
+    console.error("Error fetching JSON data:", error);
+    return [];
+  }
+};
+
+  
+
+  useEffect(() => {
+    // โหลดข้อมูลจาก CSV เมื่อ Component Mount
+    fetchCSVData().then((data) => setCsvData(data));
+  }, []);
+
+  useEffect(() => {
+    console.log('csvData',csvData)
+    if (csvData.length === 0) return; // รอจนกว่าจะโหลดข้อมูลเสร็จ
+    const interval = setInterval(() => {
+      const row = csvData[currentIndex % csvData.length]; // วนลูปเมื่อถึงแถวสุดท้าย
+      console.log("Row Values:", row);
+      setMockOptimalRPM((prev) => ({
+        ...prev,
+        flow_rate: row.flow_rate,
+        inlet_temperature: row.inlet_temperature,
+        outlet_temperature: row.outlet_temperature,
+        delta_temperature: row.delta_temperature,
+        pressure: row.pressure,
+        delta_pressure: row.delta_pressure,
+        power_consumption: row.power_consumption,
+        vibration: row.vibration,
+        ambient_temperature: row.ambient_temperature,
+        time_of_day: row.time_of_day,
+        cooling_load: row.cooling_load,
+        motor_speed: row.motor_speed,
+        energy_usage_regular_rpm: row.energy_usage_regular_rpm,
+      }));
+
+      setMockLifespan((prev) => ({
+        ...prev,
+        delta_temperature: row.delta_temperature,
+        pressure: row.pressure,
+        delta_pressure: row.delta_pressure,
+        power_consumption: row.power_consumption,
+        cooling_load: row.cooling_load,
+        motor_speed: row.motor_speed,
+        vibration: row.vibration,
+        ambient_temperature: row.ambient_temperature,
+      }));
+
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % csvData.length); // เลื่อนไปยังแถวถัดไป
+    }, 2000);
+
+    return () => clearInterval(interval); // ล้าง Interval เมื่อ Component ถูกถอด
+  }, [csvData, currentIndex]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -145,7 +227,7 @@ export default function Home() {
               height={100}
             />
           </div>
-          <div className="absolute top-[17%] left-[10%] bg-[#b8b8b8] h-[40px] w-[200px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[17%] left-[10%] bg-[#b8b8b8] h-[45px] w-[230px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Flow Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.flow_rate} m³/h</span>
           </div>
@@ -167,7 +249,7 @@ export default function Home() {
               height={100}
             />
           </div>
-          <div className="absolute top-[34%] -left-[8%] bg-[#b8b8b8] h-[40px] w-[230px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[34%] -left-[8%] bg-[#b8b8b8] h-[45px] w-[230px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Pressure Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.pressure} kPa</span>
           </div>
@@ -188,7 +270,7 @@ export default function Home() {
               height={100}
             />
           </div>
-          <div className="absolute top-[76%] left-[48%] bg-[#b8b8b8] h-[40px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[76%] left-[48%] bg-[#b8b8b8] h-[45px] w-[350px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Temperature Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.inlet_temperature}°C / {mockOptimalRPM.outlet_temperature}°C</span>
           </div>
@@ -209,7 +291,7 @@ export default function Home() {
               height={100}
             />
           </div>
-          <div className="absolute left-[80%] bg-[#b8b8b8] h-[40px] w-[190px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute left-[80%] bg-[#b8b8b8] h-[45px] w-[190px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Power Meter:
             <span className="pl-2 font-semibold">{mockOptimalRPM.power_consumption} W</span>
           </div>
@@ -230,7 +312,7 @@ export default function Home() {
               height={100}
             />
           </div>
-          <div className="absolute top-[60%] left-[62%] bg-[#b8b8b8] h-[40px] w-[220px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[60%] left-[62%] bg-[#b8b8b8] h-[45px] w-[220px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Vibration Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.vibration} m/s²</span>
           </div>
@@ -251,7 +333,7 @@ export default function Home() {
               height={100}
             />
           </div>
-          <div className="absolute top-[17%] left-[45%] bg-[#b8b8b8] h-[40px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[17%] left-[45%] bg-[#b8b8b8] h-[40px] w-[300px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Ambient Temperature Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.ambient_temperature}°C</span>
           </div>
@@ -259,24 +341,24 @@ export default function Home() {
         </aside>
       </section>
       <section className="flex flex-col gap-5 items-center justify-center text-black">
-        <div className="bg-[#fae17e] h-fit py-5 w-[400px]  rounded-3xl flex-col-1 items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-fit py-5 w-[450px]  rounded-3xl flex-col-1 items-center text-[20px] font-medium px-5">
           <div>Optimal RPM : <span className="pl-5 text-[20px] font-semibold">{results.optimalRPM ?? "Loading..."}</span></div>
           <div>Energy Usage (Regular RPM) : <span className="pl-5 text-[20px] font-semibold">{energyUsage.regularRPM ?? "Loading..."}</span></div>
           <div>Energy Usage (Optimal RPM) : <span className="pl-5 text-[20px] font-semibold">{energyUsage.predictedOptimalRPM ?? "Loading..."}</span></div>
         </div>
-        <div className="bg-[#fae17e] h-[60px] w-[400px] rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-[60px] w-[450px] rounded-3xl flex items-center text-[20px] font-medium px-5">
           Efficiency Percentage : <span className="pl-5 text-[20px] font-semibold">{results.efficiencyPercentage ?? "Loading..."} %</span>
         </div>
-        <div className="bg-[#fae17e] h-[60px] w-[400px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-[60px] w-[450px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
           Remaining Lifespan : <span className="pl-5 text-[20px] font-semibold">{results.lifespan ?? "Loading..."} years</span>
         </div>
-        <div className="bg-[#fae17e] h-[60px] w-[400px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-[60px] w-[450px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
           Electricity Cost Before : <span className="pl-5 text-[20px] font-semibold">{electricityCost.costBefore ?? "Loading..."} THB</span>
         </div>
-        <div className="bg-[#fae17e] h-[60px] w-[400px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-[60px] w-[450px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
           Electricity Cost After : <span className="pl-5 text-[20px] font-semibold">{electricityCost.costAfter ?? "Loading..."} THB</span>
         </div>
-        <div className="bg-[#8bcb8f] h-[60px] w-[400px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#8bcb8f] h-[60px] w-[450px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
           Carbon Saved : <span className="pl-5 text-[20px] font-semibold">{carbonSaved ?? "Loading..."} kgCO₂</span>
         </div>
       </section>
