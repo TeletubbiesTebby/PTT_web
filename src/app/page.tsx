@@ -125,7 +125,7 @@ export default function Home() {
 
     const intervalId = setInterval(() => {
       fetchData();
-    }, 30000);
+    }, 3000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -272,24 +272,24 @@ export default function Home() {
         </aside>
       </section>
       <section className="flex flex-col gap-5 items-center justify-center text-black">
-        <div className="bg-[#fae17e] h-fit py-5 w-1/2 rounded-3xl flex-col-1 items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-fit py-5 w-[400px]  rounded-3xl flex-col-1 items-center text-[20px] font-medium px-5">
           <div>Optimal RPM : <span className="pl-5 text-[20px] font-semibold">{results.optimalRPM ?? "Loading..."}</span></div>
           <div>Energy Usage (Regular RPM) : <span className="pl-5 text-[20px] font-semibold">{energyUsage.regularRPM ?? "Loading..."}</span></div>
           <div>Energy Usage (Optimal RPM) : <span className="pl-5 text-[20px] font-semibold">{energyUsage.predictedOptimalRPM ?? "Loading..."}</span></div>
         </div>
-        <div className="bg-[#fae17e] h-[60px] w-1/2 rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-[60px] w-[400px] rounded-3xl flex items-center text-[20px] font-medium px-5">
           Efficiency Percentage : <span className="pl-5 text-[20px] font-semibold">{results.efficiencyPercentage ?? "Loading..."} %</span>
         </div>
-        <div className="bg-[#fae17e] h-[60px] w-1/2 rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-[60px] w-[400px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
           Remaining Lifespan : <span className="pl-5 text-[20px] font-semibold">{results.lifespan ?? "Loading..."} years</span>
         </div>
-        <div className="bg-[#fae17e] h-[60px] w-1/2 rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-[60px] w-[400px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
           Electricity Cost Before : <span className="pl-5 text-[20px] font-semibold">{electricityCost.costBefore ?? "Loading..."} THB</span>
         </div>
-        <div className="bg-[#fae17e] h-[60px] w-1/2 rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#fae17e] h-[60px] w-[400px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
           Electricity Cost After : <span className="pl-5 text-[20px] font-semibold">{electricityCost.costAfter ?? "Loading..."} THB</span>
         </div>
-        <div className="bg-[#8bcb8f] h-[60px] w-1/2 rounded-3xl flex items-center text-[20px] font-medium px-5">
+        <div className="bg-[#8bcb8f] h-[60px] w-[400px]  rounded-3xl flex items-center text-[20px] font-medium px-5">
           Carbon Saved : <span className="pl-5 text-[20px] font-semibold">{carbonSaved ?? "Loading..."} kgCO₂</span>
         </div>
       </section>
