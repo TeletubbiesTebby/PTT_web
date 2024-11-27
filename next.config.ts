@@ -1,7 +1,10 @@
 import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export', // กำหนดให้ Next.js สร้างไฟล์แบบ Static Export
+  output: 'export', // ใช้ Static Export
+  images: {
+    unoptimized: true, // ปิด Image Optimization
+  },
   webpack: (config) => {
     // ปิดการใช้งาน Webpack Cache
     config.cache = false;
