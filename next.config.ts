@@ -1,7 +1,18 @@
-import type { NextConfig } from "next";
+import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  webpack: (config) => {
+    // ปิดการใช้งาน Webpack Cache
+    config.cache = false;
+
+    // หรือจัดการ snapshot ของ Webpack
+    config.snapshot = {
+      managedPaths: [],
+    };
+
+    return config;
+  },
 };
 
 export default nextConfig;
+
