@@ -4,6 +4,8 @@ import Image from "next/image";
 import Pump from "@/app/public/Pump.png";
 import { predictOptimalRPM, predictLifespan, predictEfficiency } from "@/app/conpanant/service";
 import { Results, OptimalRPMInput, EfficiencyInput, LifespanInput } from "@/app/conpanant/interface";
+import sensor1 from './public/Group 8.png'
+import sensor2 from './public/Group 9.png'
 
 export default function Home() {
   const [results, setResults] = useState<Results>({
@@ -79,12 +81,12 @@ export default function Home() {
       const predictedOptimalRPM = parseFloat(optimalRPMResult["Energy Usage (Predicted Optimal RPM)"]);
 
       // คำนวณค่าไฟฟ้าจาก Energy Usage
-     // คำนวณค่าไฟฟ้ารายเดือน
-     const costBefore = (regularRPM * electricityRate * hoursPerMonth).toFixed(2);
-     const costAfter = (predictedOptimalRPM * electricityRate * hoursPerMonth).toFixed(2);
+      // คำนวณค่าไฟฟ้ารายเดือน
+      const costBefore = (regularRPM * electricityRate * hoursPerMonth).toFixed(2);
+      const costAfter = (predictedOptimalRPM * electricityRate * hoursPerMonth).toFixed(2);
 
-     // คำนวณคาร์บอนไดออกไซด์ที่ลดลงรายเดือน
-     const carbonSavedValue = ((regularRPM - predictedOptimalRPM) * carbonEmissionRate * hoursPerMonth).toFixed(2);
+      // คำนวณคาร์บอนไดออกไซด์ที่ลดลงรายเดือน
+      const carbonSavedValue = ((regularRPM - predictedOptimalRPM) * carbonEmissionRate * hoursPerMonth).toFixed(2);
 
       setResults({
         optimalRPM: parseFloat(optimalRPMResult["Optimal RPM"]).toFixed(2),
@@ -129,10 +131,11 @@ export default function Home() {
           height={700}
         />
         <aside className="grid gap-2">
-          <div className="absolute top-[17%] left-[10%] bg-[#b8b8b8] h-[35px] w-[170px] rounded-3xl items-center flex text-[16px] font-medium px-2 ">
-            Flow Sensor :
+          <div className="absolute top-[17%] left-[10%] bg-[#b8b8b8] h-[35px] w-[200px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+            Flow Sensor:
+            <span className="pl-2 font-semibold">{mockOptimalRPM.flow_rate} m³/h</span>
           </div>
-          <div className="absolute top-[23%] left-[24%]"> 
+          <div className="absolute top-[23%] left-[24%]">
             <Image
               src={sensor1}
               alt="flow sensor"
@@ -147,21 +150,27 @@ export default function Home() {
               height={100}
             />
           </div>
-          <div className="absolute top-[35%] -left-[5%]  bg-[#b8b8b8] h-[35px] w-[190px] rounded-3xl items-center flex text-[16px] font-medium px-2 ">
-            Pressure Sensor :
+          <div className="absolute top-[35%] -left-[5%] bg-[#b8b8b8] h-[35px] w-[250px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+            Pressure Sensor:
+            <span className="pl-2 font-semibold">{mockOptimalRPM.pressure} kPa</span>
           </div>
-          <div className="absolute top-[80%] left-[40%] bg-[#b8b8b8] h-[35px] w-[220px] rounded-3xl items-center flex text-[16px] font-medium px-2 ">
-            Temperature Sensor :
+          <div className="absolute top-[80%] left-[40%] bg-[#b8b8b8] h-[35px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+            Temperature Sensor:
+            <span className="pl-2 font-semibold">{mockOptimalRPM.inlet_temperature}°C / {mockOptimalRPM.outlet_temperature}°C</span>
           </div>
-          <div className="absolute left-[80%] bg-[#b8b8b8] h-[35px] w-[190px] rounded-3xl items-center flex text-[16px] font-medium px-2 ">
-            Power Meter :
+          <div className="absolute left-[80%] bg-[#b8b8b8] h-[35px] w-[190px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+            Power Meter:
+            <span className="pl-2 font-semibold">{mockOptimalRPM.power_consumption} W</span>
           </div>
-          <div className="absolute top-[65%] left-[60%] bg-[#b8b8b8] h-[35px] w-[190px] rounded-3xl items-center flex text-[16px] font-medium px-2 ">
-            Vibration Sensor :
+          <div className="absolute top-[65%] left-[60%] bg-[#b8b8b8] h-[35px] w-[220px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+            Vibration Sensor:
+            <span className="pl-2 font-semibold">{mockOptimalRPM.vibration} m/s²</span>
           </div>
-          <div className="absolute top-[17%] left-[50%] bg-[#b8b8b8] h-[35px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2 ">
-            Ambient Temperature Sensor :
+          <div className="absolute top-[17%] left-[50%] bg-[#b8b8b8] h-[35px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+            Ambient Temperature Sensor:
+            <span className="pl-2 font-semibold">{mockOptimalRPM.ambient_temperature}°C</span>
           </div>
+
         </aside>
       </section>
       <section className="flex flex-col gap-5 items-center justify-center text-black">
