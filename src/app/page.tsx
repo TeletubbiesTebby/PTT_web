@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect , useCallback} from "react";
 import Image from "next/image";
 import Pump from "@/app/public/Pump.png";
 import { predictOptimalRPM, predictLifespan, predictEfficiency } from "@/app/conpanant/service";
@@ -42,14 +42,9 @@ export default function Home() {
 
   const [carbonSaved, setCarbonSaved] = useState<string | null>(null);
 
-
   // ค่าไฟฟ้าต่อหน่วย (บาท/หน่วย)
   const electricityRate = 4.5; // หน่วย: บาท/kWh
-
-  // อัตราการปล่อยคาร์บอนไดออกไซด์ (kgCO₂/kWh)
-  const carbonEmissionRate = 0.52;
-
-  // จำนวนชั่วโมงใน 1 เดือน (สมมุติการทำงาน 24 ชั่วโมง x 30 วัน)
+  const carbonEmissionRate = 0.52; // kgCO₂/kWh
   const hoursPerMonth = 24 * 30; // 720 ชั่วโมง/เดือน
 
   const mockOptimalRPM: OptimalRPMInput = {
@@ -68,8 +63,6 @@ export default function Home() {
     energy_usage_regular_rpm: 1.2,
   };
 
-  const mockEfficiency: OptimalRPMInput = { ...mockOptimalRPM };
-
   const mockLifespan: LifespanInput = {
     delta_temperature: 5.0,
     pressure: 101.3,
@@ -81,27 +74,24 @@ export default function Home() {
     ambient_temperature: 28.0,
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const optimalRPMResult = await predictOptimalRPM(mockOptimalRPM);
-      const efficiencyResult = await predictEfficiency(mockEfficiency);
+      const efficiencyResult = await predictEfficiency(mockOptimalRPM);
       const lifespanResult = await predictLifespan(mockLifespan);
 
-      const regularRPM = parseFloat(optimalRPMResult["Energy Usage (Regular RPM)"]);
-      const predictedOptimalRPM = parseFloat(optimalRPMResult["Energy Usage (Predicted Optimal RPM)"]);
+      const regularRPM = parseFloat(optimalRPMResult["Energy Usage (Regular RPM)"] as string);
+      const predictedOptimalRPM = parseFloat(optimalRPMResult["Energy Usage (Predicted Optimal RPM)"] as string);
 
-      // คำนวณค่าไฟฟ้าจาก Energy Usage
-      // คำนวณค่าไฟฟ้ารายเดือน
       const costBefore = (regularRPM * electricityRate * hoursPerMonth).toFixed(2);
       const costAfter = (predictedOptimalRPM * electricityRate * hoursPerMonth).toFixed(2);
 
-      // คำนวณคาร์บอนไดออกไซด์ที่ลดลงรายเดือน
       const carbonSavedValue = ((regularRPM - predictedOptimalRPM) * carbonEmissionRate * hoursPerMonth).toFixed(2);
 
       setResults({
-        optimalRPM: parseFloat(optimalRPMResult["Optimal RPM"]).toFixed(2),
-        efficiencyPercentage: parseFloat(efficiencyResult["Efficiency Percentage"]).toFixed(2),
-        lifespan: parseFloat(lifespanResult["Remaining Lifespan (years)"]).toFixed(2),
+        optimalRPM: (optimalRPMResult["Optimal RPM"] as number).toFixed(2),
+        efficiencyPercentage: (efficiencyResult["Efficiency Percentage"] as number).toFixed(2),
+        lifespan: (lifespanResult["Remaining Lifespan (years)"] as number).toFixed(2),
       });
 
       setEnergyUsage({
@@ -118,17 +108,14 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [electricityRate, carbonEmissionRate, hoursPerMonth, mockOptimalRPM, mockLifespan]);
 
   useEffect(() => {
     fetchData();
-
-    const intervalId = setInterval(() => {
-      fetchData();
-    }, 3000);
-
+    const intervalId = setInterval(fetchData, 3000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [fetchData]);
+
 
   return (
     <main className="grid grid-cols-[6fr_5fr] w-full min-h-screen bg-black">
