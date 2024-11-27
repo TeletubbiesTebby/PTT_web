@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Pump from "@/app/public/Pump.png";
 import { predictOptimalRPM, predictLifespan, predictEfficiency } from "@/app/conpanant/service";
-import { Results, OptimalRPMInput, EfficiencyInput, LifespanInput } from "@/app/conpanant/interface";
+import { Results, OptimalRPMInput,  LifespanInput } from "@/app/conpanant/interface";
 import sensor1 from './public/Group 8.png'
 import sensor2 from './public/Group 9.png'
 import sensor3 from './public/Group 10.png'
@@ -68,7 +68,7 @@ export default function Home() {
     energy_usage_regular_rpm: 1.2,
   };
 
-  const mockEfficiency: EfficiencyInput = { ...mockOptimalRPM };
+  const mockEfficiency: OptimalRPMInput = { ...mockOptimalRPM };
 
   const mockLifespan: LifespanInput = {
     delta_temperature: 5.0,

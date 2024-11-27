@@ -22,7 +22,7 @@ export interface OptimalRPMInput {
     energy_usage_regular_rpm: number;
   }
   
-export interface EfficiencyInput extends OptimalRPMInput { }
+
   
 export interface LifespanInput {
     delta_temperature: number;
