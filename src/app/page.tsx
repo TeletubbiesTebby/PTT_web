@@ -131,7 +131,7 @@ export default function Home() {
           height={700}
         />
         <aside className="grid gap-2">
-          <div className="absolute top-[17%] left-[10%] bg-[#b8b8b8] h-[35px] w-[200px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[17%] left-[10%] bg-[#b8b8b8] h-[40px] w-[200px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Flow Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.flow_rate} m³/h</span>
           </div>
@@ -150,23 +150,23 @@ export default function Home() {
               height={100}
             />
           </div>
-          <div className="absolute top-[35%] -left-[5%] bg-[#b8b8b8] h-[35px] w-[250px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[35%] -left-[5%] bg-[#b8b8b8] h-[40px] w-[250px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Pressure Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.pressure} kPa</span>
           </div>
-          <div className="absolute top-[80%] left-[40%] bg-[#b8b8b8] h-[35px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[80%] left-[40%] bg-[#b8b8b8] h-[40px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Temperature Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.inlet_temperature}°C / {mockOptimalRPM.outlet_temperature}°C</span>
           </div>
-          <div className="absolute left-[80%] bg-[#b8b8b8] h-[35px] w-[190px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute left-[80%] bg-[#b8b8b8] h-[40px] w-[190px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Power Meter:
             <span className="pl-2 font-semibold">{mockOptimalRPM.power_consumption} W</span>
           </div>
-          <div className="absolute top-[65%] left-[60%] bg-[#b8b8b8] h-[35px] w-[220px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[65%] left-[60%] bg-[#b8b8b8] h-[40px] w-[220px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Vibration Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.vibration} m/s²</span>
           </div>
-          <div className="absolute top-[17%] left-[50%] bg-[#b8b8b8] h-[35px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[17%] left-[50%] bg-[#b8b8b8] h-[40px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Ambient Temperature Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.ambient_temperature}°C</span>
           </div>
