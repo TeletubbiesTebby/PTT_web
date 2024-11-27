@@ -6,6 +6,16 @@ import { predictOptimalRPM, predictLifespan, predictEfficiency } from "@/app/con
 import { Results, OptimalRPMInput, EfficiencyInput, LifespanInput } from "@/app/conpanant/interface";
 import sensor1 from './public/Group 8.png'
 import sensor2 from './public/Group 9.png'
+import sensor3 from './public/Group 10.png'
+import sensor4 from './public/Group 11.png'
+import sensor5 from './public/Group 12.png'
+import sensor6 from './public/Group 13.png'
+import sensor7 from './public/Group 14.png'
+import sensor8 from './public/Group 15.png'
+import sensor9 from './public/Group 16.png'
+import sensor10 from './public/Group 17.png'
+import sensor11 from './public/Group 18.png'
+import sensor12 from './public/Group 19.png'
 
 export default function Home() {
   const [results, setResults] = useState<Results>({
@@ -131,14 +141,12 @@ export default function Home() {
           height={700}
         />
         <aside className="grid gap-2">
-          <div className="absolute top-[17%] left-[10%] bg-[#b8b8b8] h-[40px] w-[200px] rounded-3xl items-center flex text-[16px] font-medium px-2">
-            Flow Sensor:
-            <span className="pl-2 font-semibold">{mockOptimalRPM.flow_rate} m³/h</span>
-          </div>
+
+          {/* Flow sensor */}
           <div className="absolute top-[23%] left-[24%]">
             <Image
               src={sensor1}
-              alt="flow sensor"
+              alt="bg-flow sensor"
               width={100}
               height={100}
             />
@@ -150,23 +158,113 @@ export default function Home() {
               height={100}
             />
           </div>
-          <div className="absolute top-[35%] -left-[5%] bg-[#b8b8b8] h-[40px] w-[250px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+          <div className="absolute top-[17%] left-[10%] bg-[#b8b8b8] h-[40px] w-[200px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+            Flow Sensor:
+            <span className="pl-2 font-semibold">{mockOptimalRPM.flow_rate} m³/h</span>
+          </div>
+
+
+          {/* Pressure sensor */}
+          <div className="absolute top-[40%] left-[5%]"> 
+            <Image
+              src={sensor5}
+              alt="bg-pressure sensor"
+              width={100}
+              height={100}
+            />
+            <Image
+              src={sensor6}
+              className="absolute top-[20%] left-[23%]"
+              alt="pressure sensor"
+              width={60}
+              height={100}
+            />
+          </div>
+          <div className="absolute top-[34%] -left-[8%] bg-[#b8b8b8] h-[40px] w-[230px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Pressure Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.pressure} kPa</span>
           </div>
-          <div className="absolute top-[80%] left-[40%] bg-[#b8b8b8] h-[40px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+
+          {/* Temperature sensor */}
+          <div className="absolute top-[67%] left-[38%]"> 
+            <Image
+              src={sensor4}
+              alt="bg-temp sensor"
+              width={100}
+              height={100}
+            />
+            <Image
+              src={sensor3}
+              className="absolute top-[20%] left-[15%]"
+              alt="temp sensor"
+              width={80}
+              height={100}
+            />
+          </div>
+          <div className="absolute top-[76%] left-[48%] bg-[#b8b8b8] h-[40px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Temperature Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.inlet_temperature}°C / {mockOptimalRPM.outlet_temperature}°C</span>
+          </div>
+
+          {/* Power sensor */}
+          <div className="absolute top-[40%] left-[74%]"> 
+            <Image
+              src={sensor11}
+              alt="bg-power sensor"
+              width={120}
+              height={100}
+            />
+            <Image
+              src={sensor12}
+              className="absolute top-[32%] left-[16%]"
+              alt="power sensor"
+              width={80}
+              height={100}
+            />
           </div>
           <div className="absolute left-[80%] bg-[#b8b8b8] h-[40px] w-[190px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Power Meter:
             <span className="pl-2 font-semibold">{mockOptimalRPM.power_consumption} W</span>
           </div>
-          <div className="absolute top-[65%] left-[60%] bg-[#b8b8b8] h-[40px] w-[220px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+
+          {/* Vibration sensor */}
+          <div className="absolute top-[48%] left-[55%]"> 
+            <Image
+              src={sensor9}
+              alt="bg-vibration sensor"
+              width={100}
+              height={100}
+            />
+            <Image
+              src={sensor10}
+              className="absolute top-[40%] left-[15%]"
+              alt="vibration sensor"
+              width={70}
+              height={100}
+            />
+          </div>
+          <div className="absolute top-[60%] left-[62%] bg-[#b8b8b8] h-[40px] w-[220px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Vibration Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.vibration} m/s²</span>
           </div>
-          <div className="absolute top-[17%] left-[50%] bg-[#b8b8b8] h-[40px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
+
+          {/* Ambient sensor */}
+          <div className="absolute top-[23%] left-[39%]">
+            <Image
+              src={sensor7}
+              alt="bg-Ambient sensor"
+              width={100}
+              height={100}
+            />
+            <Image
+              src={sensor8}
+              className="absolute top-[12%] left-[20%]"
+              alt="Ambient sensor"
+              width={70}
+              height={100}
+            />
+          </div>
+          <div className="absolute top-[17%] left-[45%] bg-[#b8b8b8] h-[40px] w-[280px] rounded-3xl items-center flex text-[16px] font-medium px-2">
             Ambient Temperature Sensor:
             <span className="pl-2 font-semibold">{mockOptimalRPM.ambient_temperature}°C</span>
           </div>
